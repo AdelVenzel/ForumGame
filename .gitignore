@@ -3,4 +3,4 @@
 .settings/
 target/
 /shelf/
-/.idea/workspace.xml
+.idea/**

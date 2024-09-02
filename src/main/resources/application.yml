@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/forum
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: sadic888
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+  locations:
+    classpath: db/migration
+
+jwt:
+  secret: verysecure
