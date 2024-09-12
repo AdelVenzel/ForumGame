@@ -1,5 +1,6 @@
 package ForumGame.service;
 
+import ForumGame.domain.Comment;
 import ForumGame.domain.Post;
 import ForumGame.domain.Role;
 import ForumGame.domain.UserEntity;
@@ -19,6 +20,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PostServiceImpl implements DatabaseWorker<Post, PostDto> {
     private final PostRepository postRepository;
+    private final CommentServiceImpl commentService;
 
     @Override
     public void add(Post entity) {
@@ -45,6 +47,8 @@ public class PostServiceImpl implements DatabaseWorker<Post, PostDto> {
         Optional<Post> entityOpt = postRepository.findById(id);
         if (entityOpt.isPresent()){
             Post post = entityOpt.get();
+            List<Comment> comments = post.getComments();
+            commentService.deleteAll(comments);
             postRepository.deleteById(id);
             log.debug("post delete({})", post.getTitle());
         }else{

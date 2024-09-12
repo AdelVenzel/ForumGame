@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,6 +50,10 @@ public class CommentServiceImpl implements DatabaseWorker<Comment, CommentDto> {
         } else {
             log.debug("comment not found");
         }
+    }
+
+    public void deleteAll(List<Comment> comments){
+        commentRepository.deleteAll(comments);
     }
 
     /**
