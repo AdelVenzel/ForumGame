@@ -48,10 +48,7 @@ private final UserRepository userRepository;
         return userEntity;
     }
 
-    public void changeRole(UserEntity admin, Role role, String login){
-        if (admin.getRoles() != Role.ADMIN ){
-            throw new CustomException("Not enough rights");
-        }
+    public void changeRole(Role role, String login){
         UserEntity user = findByLogin(login);
         Role oldRole = user.getRoles();
         user.setRoles(role);
@@ -59,20 +56,14 @@ private final UserRepository userRepository;
         log.debug("The user's({}) role has been changed from({}) to({})", user.getLogin(), oldRole, user.getRoles());
     }
 
-    public void blockingUser(UserEntity admin, String login){
-        if (admin.getRoles() != Role.ADMIN){
-            throw new CustomException("Not enough rights");
-        }
+    public void blockingUser(String login){
         UserEntity user = findByLogin(login);
         user.setStatus(UserStatus.BLOCKED);
         userRepository.save(user);
         log.debug("User({}) is blocked", user.getLogin());
     }
 
-    public void unblockingUser(UserEntity admin, String login){
-        if (admin.getRoles() != Role.ADMIN){
-            throw new CustomException("Not enough rights");
-        }
+    public void unblockingUser(String login){
         UserEntity user = findByLogin(login);
         user.setStatus(UserStatus.ACTIVE);
         userRepository.save(user);

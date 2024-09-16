@@ -9,6 +9,7 @@ import ForumGame.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -33,23 +34,26 @@ public class UserEntityController {
 
 
     @PutMapping("/users/changeRole")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String changeRole(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam String role) {
-        UserEntity userEntity = userService.checkBlocked(userDetails);
-        userService.changeRole(userEntity, Role.valueOf(role), login);
+        userService.checkBlocked(userDetails);
+        userService.changeRole(Role.valueOf(role), login);
         return "Role change was successful";
     }
 
     @PutMapping("/users/blocking")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String blockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login) {
-        UserEntity userEntity = userService.checkBlocked(userDetails);
-        userService.blockingUser(userEntity, login);
+        userService.checkBlocked(userDetails);
+        userService.blockingUser(login);
         return "User is blocked";
     }
 
     @PutMapping("/users/unblocking")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String unblockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login) {
-        UserEntity userEntity = userService.checkBlocked(userDetails);
-        userService.unblockingUser(userEntity, login);
+        userService.checkBlocked(userDetails);
+        userService.unblockingUser(login);
         return "User is unblocked";
     }
 
