@@ -1,7 +1,8 @@
 package ForumGame.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,12 +21,11 @@ public class Post {
     private String content;
     @Column(name = "date_creation")
     private LocalDateTime dateCreation;
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 

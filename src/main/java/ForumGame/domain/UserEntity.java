@@ -1,6 +1,5 @@
 package ForumGame.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,10 +24,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "userEntity")
     private List<Post> posts;
-    @JsonIgnore
+
     @OneToMany(mappedBy = "userEntity")
     private List<Comment> comments;
 }

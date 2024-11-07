@@ -25,40 +25,30 @@ public class UserEntityController {
 
     private final UserServiceImpl userService;
 
-    @PostMapping("/users/registration")
+    @PostMapping("/v1/users")
     public String register(@RequestBody UserEntityDto dto) {
         UserEntity user = UserEntityMapper.mapToEntity(dto);
         userService.register(user);
         return "User registration";
     }
 
-
-    @PutMapping("/users/changeRole")
+    @PutMapping("/v1/users/role")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public String changeRole(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam String role) {
-        userService.checkBlocked(userDetails);
-        userService.changeRole(Role.valueOf(role), login);
+        UserEntity myUser = userService.checkBlocked(userDetails);
+        userService.changeRole(Role.valueOf(role), login, myUser);
         return "Role change was successful";
     }
 
-    @PutMapping("/users/blocking")
+    @PutMapping("/v1/users")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String blockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login) {
-        userService.checkBlocked(userDetails);
-        userService.blockingUser(login);
-        return "User is blocked";
+    public String blockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam boolean block) {
+        UserEntity myUser = userService.checkBlocked(userDetails);
+        userService.blockUser(login, block, myUser);
+        return block ? "User is blocking" : "User is unblocking";
     }
 
-    @PutMapping("/users/unblocking")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String unblockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login) {
-        userService.checkBlocked(userDetails);
-        userService.unblockingUser(login);
-        return "User is unblocked";
-    }
-
-
-    @GetMapping("/users/generateToken")
+    @GetMapping("/v1/users/token")
     public ResponseEntity<String> generateToken(Principal principal) {
         final String token = jwtTokenUtil.generateToken(principal.getName());
         return ResponseEntity.ok(token);

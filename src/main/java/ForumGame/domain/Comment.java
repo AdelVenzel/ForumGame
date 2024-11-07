@@ -1,7 +1,8 @@
 package ForumGame.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -20,12 +21,10 @@ public class Comment {
     @Column(name = "number_likes")
     private int numberLikes;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
