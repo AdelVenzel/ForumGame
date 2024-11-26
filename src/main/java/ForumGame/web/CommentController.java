@@ -23,34 +23,30 @@ public class CommentController {
     private final PostServiceImpl postService;
 
     @PostMapping("/v1/comments")
-    public String add(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDto dto, @RequestParam int postId) {
+    public void add(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDto dto, @RequestParam int postId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         Post post = postService.findById(postId);
         Comment comment = CommentMapper.mapToEntity(dto, userEntity, post);
         commentService.add(comment);
-        return "Add comment";
     }
 
     @PutMapping("/v1/comments")
-    public String update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDto dto, @RequestParam int commentId) {
+    public void update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody CommentDto dto, @RequestParam int commentId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         commentService.checkComment(userEntity, commentId);
         commentService.update(dto, commentId);
-        return "update comment";
     }
 
     @DeleteMapping("/v1/comments")
-    public String delete(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int commentId) {
+    public void delete(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int commentId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         commentService.checkComment(userEntity, commentId);
         commentService.delete(commentId);
-        return "delete comment";
     }
 
     @PutMapping("/v1/comments/like")
-    public String like(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int commentId) {
+    public void like(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int commentId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         commentService.like(commentId, userEntity);
-        return "Like";
     }
 }

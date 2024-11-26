@@ -26,26 +26,23 @@ public class UserEntityController {
     private final UserServiceImpl userService;
 
     @PostMapping("/v1/users")
-    public String register(@RequestBody UserEntityDto dto) {
+    public void register(@RequestBody UserEntityDto dto) {
         UserEntity user = UserEntityMapper.mapToEntity(dto);
         userService.register(user);
-        return "User registration";
     }
 
     @PutMapping("/v1/users/role")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String changeRole(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam String role) {
+    public void changeRole(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam String role) {
         UserEntity myUser = userService.checkBlocked(userDetails);
         userService.changeRole(Role.valueOf(role), login, myUser);
-        return "Role change was successful";
     }
 
     @PutMapping("/v1/users")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public String blockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam boolean block) {
+    public void blockingUser(@AuthenticationPrincipal UserDetails userDetails, @RequestParam String login, @RequestParam boolean block) {
         UserEntity myUser = userService.checkBlocked(userDetails);
         userService.blockUser(login, block, myUser);
-        return block ? "User is blocking" : "User is unblocking";
     }
 
     @GetMapping("/v1/users/token")

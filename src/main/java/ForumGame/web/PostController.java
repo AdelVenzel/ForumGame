@@ -1,5 +1,4 @@
 package ForumGame.web;
-
 import ForumGame.domain.Post;
 import ForumGame.domain.UserEntity;
 import ForumGame.dto.PostDto;
@@ -25,27 +24,24 @@ public class PostController {
     private final UserServiceImpl userService;
 
     @PostMapping("/v1/posts")
-    public String add(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto dto) {
+    public void add(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto dto) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         Post post = PostMapper.mapToEntity(dto, userEntity);
         postService.add(post);
-        return "add post";
     }
 
     @PutMapping("/v1/posts")
-    public String update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto dto, @RequestParam int postId) {
+    public void update(@AuthenticationPrincipal UserDetails userDetails, @RequestBody PostDto dto, @RequestParam int postId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         postService.checkPost(userEntity, postId);
         postService.update(dto, postId);
-        return "update post";
     }
 
     @DeleteMapping("/v1/posts")
-    public String delete(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int postId) {
+    public void delete(@AuthenticationPrincipal UserDetails userDetails, @RequestParam int postId) {
         UserEntity userEntity = userService.checkBlocked(userDetails);
         postService.checkPost(userEntity, postId);
         postService.delete(postId);
-        return "delete post";
     }
 
     /**
